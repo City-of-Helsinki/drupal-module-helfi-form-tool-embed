@@ -5,4 +5,4 @@ This module integrates From Tool made forms into any Drupal site. It creates nod
 
 
 Environment variables:
-FORM_TOOL_HOST -> hostname of the form tool backend.
+FORM_TOOL_HOST -> hostname of the form tool backend. Used for form metadata & embedding
