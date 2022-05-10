@@ -1,0 +1,20 @@
+uuid: 93955c15-25de-4303-95a6-a5f4dd903653
+langcode: fi
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_embed_form
+    - paragraphs.paragraphs_type.formtool_embed
+  module:
+    - helfi_formtool_embed
+id: paragraph.formtool_embed.field_embed_form
+field_name: field_embed_form
+entity_type: paragraph
+bundle: formtool_embed
+label: 'Embed Form'
+description: ''
+required: true
+translatable: false
+default_value_callback: ''
+settings: { }
+field_type: embed_form

@@ -1,0 +1,4 @@
+administer helfi_formtool_embed configuration:
+  title: 'Administer helfi_formtool_embed configuration'
+  description: 'Optional description.'
+  restrict access: true

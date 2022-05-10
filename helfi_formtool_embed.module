@@ -1,0 +1,105 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for helfi_formtool_embed module.
+ *
+ * @DCG
+ * This file is no longer required in Drupal 8.
+ * @see https://www.drupal.org/node/2217931
+ */
+
+
+/**
+ * @file
+ * Defines an iframe field with all attributes.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+
+if (!defined('EMBED_FORM_DEBUG_LEVEL')) {
+  define('EMBED_FORM_DEBUG_LEVEL', 0);
+}
+
+/**
+ * Debug the iframe module.
+ *
+ * Function "dpr" is from devel-module, we will use it if exists.
+ */
+function embed_form_debug($level, $func = 'iframe', $debugvar = NULL) {
+  if ($level <= EMBED_FORM_DEBUG_LEVEL) {
+    try {
+      $develdumper = \Drupal::service('devel.dumper', FALSE);
+    } catch (Exception $exception) {
+      $develdumper = '';
+    }
+    if (isset($develdumper) && is_object($develdumper)) {
+      $develdumper->dumpOrExport($debugvar, $func, NULL, 'drupal_variable');
+    }
+    else {
+      if (is_object($debugvar)) {
+        $debugvar = [get_class($debugvar), get_class_methods($debugvar)];
+      }
+      error_log('ID: ' . $level . ' ' . $func);
+      \Drupal::messenger()
+        ->addMessage('[iframe(' . $level . ')] ' . $func . ' ' . print_r($debugvar, TRUE), 'warning');
+    }
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function helfi_formtool_embed_theme() {
+  return [
+    /* template name "iframe" => templates/iframe.html.twig */
+    'embed_form' => [
+      'variables' => [
+        'src' => 'src',
+        'attributes' => [],
+        'style' => '',
+        'headerlevel' => '',
+      ],
+      'template' => 'embed-form',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function helfi_formtool_embed_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+
+
+  if ($form_id == 'user_login_form') {
+    // @todo here we need to clean up form in select places. don't know how though.
+
+    /** @var \Drupal\node\Entity\Node $node */
+    $node = \Drupal::routeMatch()->getParameter('node');
+
+    if ($node->getType() == 'form_embed_page') {
+      $form["name"]['#access'] = FALSE;
+      $form["pass"]['#access'] = FALSE;
+      $form["actions"]['#access'] = FALSE;
+      $d = 'asdf';
+    }
+  }
+
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function helfi_formtool_embed_preprocess_embed_form(&$variables) {
+
+  // if no iframe src then auth level was not enough, show login form
+  if ($variables['src'] == 'NOAUTH') {
+    // @todo clean up unwanted values from login form
+    // we only want to show Tunnistamo non-admin login here.
+    $login_form = \Drupal::formBuilder()
+      ->getForm(Drupal\user\Form\UserLoginForm::class);
+
+    $variables['login_form'] = $login_form;
+  }
+}

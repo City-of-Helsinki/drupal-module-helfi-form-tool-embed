@@ -1,0 +1,15 @@
+helfi_formtool_embed.example:
+  path: '/helfi-formtool-embed/example'
+  defaults:
+    _title: 'Example'
+    _controller: '\Drupal\helfi_formtool_embed\Controller\HelfiFormtoolEmbedController::build'
+  requirements:
+    _permission: 'access content'
+
+helfi_formtool_embed.settings_form:
+  path: '/admin/config/system/helfi-formtool-embed'
+  defaults:
+    _title: 'helfi_formtool_embed settings'
+    _form: 'Drupal\helfi_formtool_embed\Form\SettingsForm'
+  requirements:
+    _permission: 'administer helfi_formtool_embed configuration'

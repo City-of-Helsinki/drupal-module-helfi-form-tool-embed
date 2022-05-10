@@ -1,0 +1,6 @@
+services:
+  helfi_formtool_embed.event_subscriber:
+    class: Drupal\helfi_formtool_embed\EventSubscriber\HelfiFormtoolEmbedSubscriber
+    arguments: ['@messenger']
+    tags:
+      - { name: event_subscriber }

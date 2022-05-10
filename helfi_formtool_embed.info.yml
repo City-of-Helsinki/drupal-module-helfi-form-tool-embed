@@ -1,0 +1,9 @@
+name: helfi_formtool_embed
+type: module
+description: Embedding tool for Helsinki form tool
+package: Helfi
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - helfi_tunnistamo
+  - helfi_helsinki_profiili
