@@ -1,0 +1,13 @@
+{
+    "name": "drupal/helfi_formtool_embed",
+    "description": "Embed form tool to Drupal",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "autoload": {
+        "psr-4": {
+            "Drupal\\HelfiFormtoolEmbed\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {}
+}
