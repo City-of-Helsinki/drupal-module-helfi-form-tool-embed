@@ -1,7 +1,7 @@
 # Form tool embed module
 
 This module integrates From Tool made forms into any Drupal site. It creates nodetype, paragraph & field configurations
- and is meant to be a drop in solution for embedding forms to Drupal from form tool.
+ and is meant to be a drop in solution for embedding forms to Drupal from form tool..
 
 
 Environment variables:
