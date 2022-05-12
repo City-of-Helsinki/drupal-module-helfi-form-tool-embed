@@ -26,8 +26,8 @@ class EmbedFormFormatter extends FormatterBase {
    */
   public static function defaultSettings(): array {
     return [
-      'form_id' => NULL,
-    ] + parent::defaultSettings();
+        'form_id' => NULL,
+      ] + parent::defaultSettings();
   }
 
   /**
@@ -57,7 +57,8 @@ class EmbedFormFormatter extends FormatterBase {
         continue;
       }
 
-      $embedDomainPath = '//hel-fi-form-tool.docker.so/fi/formtool/';
+      $formToolUrl = getenv('FORM_TOOL_HOST');
+      $embedDomainPath = $formToolUrl . '/fi/formtool/';
 
       $formMetadata = [];
 

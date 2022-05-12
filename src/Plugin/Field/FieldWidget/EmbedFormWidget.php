@@ -52,62 +52,26 @@ class EmbedFormWidget extends WidgetBase {
     /** @var \GuzzleHttp\Client $httpClient */
     $httpClient = \Drupal::service('http_client');
 
+    $formToolUrl = getenv('FORM_TOOL_HOST');
+
     try {
-      $httpClient->get(
-        'http://localhost:3001/formtool/metadata',
+      $response = $httpClient->get(
+        $formToolUrl . '/formtool/metadata',
         [
           'headers' => [
-            'User-Agent' => 'drupal/Guzzle',
+            'User-Agent' => 'drupal/FormEmbed',
             'Accept' => 'application/json',
-            'X-Auth-Token' => 'testi123',
+            'X-Auth-Token' => getenv('FORM_TOOL_TOKEN'),
           ],
         ]
       );
 
-    } catch (\Exception $e) {
-      $d = 'asdf';
-    }
+      $body = Json::decode($response->getBody()->getContents());
 
-    $body = Json::decode('
-    {
-    "data": [
-{
-            "id": "testilomake",
-            "title": "Testilomake",
-            "owner": "Meikä itte",
-            "email_notify": "test@testi.com",
-            "form_code": "TESTI123",
-            "sector": "Liikenne",
-            "ad_group": "helfi.liikenne",
-            "postal_address": "sadfasdf \r\nasdf",
-            "privacy_policy": "asdf",
-            "privacy_policy_sv": "fdas",
-            "privacy_policy_en": "asdg",
-            "privacy_policy_ru": "",
-            "login_type": "2",
-            "sensitive": "1"
-        },
-        {
-            "id": "todistusjaljennospyynto_tilaus",
-            "title": "Todistusjäljennöspyyntö, tilaus",
-            "owner": "Omistajan nimi (TODO)",
-            "sector": "Sektori",
-            "ad_group": "AD-ryhmä",
-            "postal_address": "",
-            "privacy_policy": "",
-            "privacy_policy_sv": "",
-            "privacy_policy_en": "",
-            "privacy_policy_ru": "",
-            "login_type": "2",
-            "sensitive": "1",
-            "form_code": "TODISTUS",
-            "email_notify": ""
-        }
-    ],
-    "method": "GET",
-    "status": 200
+    } catch (\Exception $e) {
+      \Drupal::logger('helfi_formtool_embed')->error($e->getMessage());
+      $body['data'] = [];
     }
-    ');
 
     $form_options = [];
 
