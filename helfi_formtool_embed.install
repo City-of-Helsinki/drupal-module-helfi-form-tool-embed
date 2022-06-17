@@ -6,44 +6,6 @@
  */
 
 /**
- * Implements hook_install().
- */
-function helfi_formtool_embed_install() {
-  \Drupal::messenger()->addStatus(__FUNCTION__);
-}
-
-/**
- * Implements hook_uninstall().
- */
-function helfi_formtool_embed_uninstall() {
-  \Drupal::messenger()->addStatus(__FUNCTION__);
-
-  $query = \Drupal::database()->delete('config');
-  $query->condition('name', 'field.storage.paragraph.field_embed_form');
-  $query->execute();
-
-  $query = \Drupal::database()->delete('config');
-  $query->condition('name', 'field.field.paragraph.formtool_embed.field_embed_form');
-  $query->execute();
-
-  $query = \Drupal::database()->delete('config');
-  $query->condition('name', 'field.field.node.form_embed_page.field_content');
-  $query->execute();
-
-  $query = \Drupal::database()->delete('config');
-  $query->condition('name', 'node.type.form_embed_page');
-  $query->execute();
-
-  $query = \Drupal::database()->delete('config');
-  $query->condition('name', 'paragraphs.paragraphs_type.formtool_embed');
-  $query->execute();
-
-
-  \Drupal::messenger()->addStatus('Fields supposedly deleted.');
-
-}
-
-/**
  * Implements hook_requirements().
  */
 function helfi_formtool_embed_requirements($phase): array {

@@ -1,6 +1,0 @@
-helfi_formtool_embed.settings_form:
-  title: helfi_formtool_embed
-  description: Configure helfi_formtool_embed.
-  parent: system.admin_config_system
-  route_name: helfi_formtool_embed.settings_form
-  weight: 10

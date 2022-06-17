@@ -26,8 +26,8 @@ class EmbedFormFormatter extends FormatterBase {
    */
   public static function defaultSettings(): array {
     return [
-        'form_id' => NULL,
-      ] + parent::defaultSettings();
+      'form_id' => NULL,
+    ] + parent::defaultSettings();
   }
 
   /**
