@@ -9,17 +9,16 @@
  * @see https://www.drupal.org/node/2217931
  */
 
+use Drupal\user\Form\UserLoginForm;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * @file
  * Defines an iframe field with all attributes.
  */
 
-use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\Core\Url;
-
-if (!defined('EMBED_FORM_DEBUG_LEVEL')) {
-  define('EMBED_FORM_DEBUG_LEVEL', 0);
+if (!defined('HELFI_FORMTOOL_EMBED_EMBED_FORM_DEBUG_LEVEL')) {
+  define('HELFI_FORMTOOL_EMBED_EMBED_FORM_DEBUG_LEVEL', 0);
 }
 
 /**
@@ -27,11 +26,12 @@ if (!defined('EMBED_FORM_DEBUG_LEVEL')) {
  *
  * Function "dpr" is from devel-module, we will use it if exists.
  */
-function embed_form_debug($level, $func = 'iframe', $debugvar = NULL) {
-  if ($level <= EMBED_FORM_DEBUG_LEVEL) {
+function helfi_formtool_embed_form_debug($level, $func = 'iframe', $debugvar = NULL) {
+  if ($level <= HELFI_FORMTOOL_EMBED_EMBED_FORM_DEBUG_LEVEL) {
     try {
       $develdumper = \Drupal::service('devel.dumper', FALSE);
-    } catch (Exception $exception) {
+    }
+    catch (Exception $exception) {
       $develdumper = '';
     }
     if (isset($develdumper) && is_object($develdumper)) {
@@ -69,20 +69,16 @@ function helfi_formtool_embed_theme() {
 /**
  * Implements hook_form_alter().
  */
-function helfi_formtool_embed_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
-
+function helfi_formtool_embed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
 
   if ($form_id == 'user_login_form') {
-    // @todo here we need to clean up form in select places. don't know how though.
-
-    /** @var \Drupal\node\Entity\Node $node */
-    $node = \Drupal::routeMatch()->getParameter('node');
-
-    if ($node !== NULL && $node->getType() == 'form_embed_page') {
+    $qParams = \Drupal::request()->query->all();
+    // We want to hide all normal login elements
+    // to only allow login via Tunnistamo.
+    if (!isset($qParams['login']) || $qParams['login'] != 'admin') {
       $form["name"]['#access'] = FALSE;
       $form["pass"]['#access'] = FALSE;
       $form["actions"]['#access'] = FALSE;
-      $d = 'asdf';
     }
   }
 
@@ -93,12 +89,12 @@ function helfi_formtool_embed_form_alter(&$form, \Drupal\Core\Form\FormStateInte
  */
 function helfi_formtool_embed_preprocess_embed_form(&$variables) {
 
-  // if no iframe src then auth level was not enough, show login form
+  // If no iframe src then auth level was not enough, show login form.
   if ($variables['src'] == 'NOAUTH') {
     // @todo clean up unwanted values from login form
     // we only want to show Tunnistamo non-admin login here.
     $login_form = \Drupal::formBuilder()
-      ->getForm(Drupal\user\Form\UserLoginForm::class);
+      ->getForm(UserLoginForm::class);
 
     $variables['login_form'] = $login_form;
   }
