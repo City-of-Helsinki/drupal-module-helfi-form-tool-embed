@@ -20,16 +20,6 @@ class EmbedFormWidget extends WidgetBase {
 
 
   /**
-   * Allowed editable attributes of iframe field on node-edit.
-   *
-   * @var array
-   */
-  public array $allowedAttributes = [
-    'embed_form_id' => 1,
-    'embed_form_data' => 1,
-  ];
-
-  /**
    * {@inheritdoc}
    */
   public static function defaultSettings(): array {
@@ -49,7 +39,6 @@ class EmbedFormWidget extends WidgetBase {
 
     /** @var \GuzzleHttp\Client $httpClient */
     $httpClient = \Drupal::service('http_client');
-
     $formToolUrl = getenv('FORM_TOOL_HOST');
 
     try {
@@ -69,18 +58,14 @@ class EmbedFormWidget extends WidgetBase {
     }
     catch (\Exception $e) {
       \Drupal::logger('helfi_formtool_embed')->error($e->getMessage());
-
-      if (getenv('APP_ENV') == 'local') {
-        $body = Json::decode($this->demoData());
-      }
-      else {
-        $body['data'] = [];
-      }
+      $body = [
+        'data' => [],
+      ];
     }
 
     $form_options = [];
 
-    foreach ($body['data'] as $key => $value) {
+    foreach ($body['data'] as $value) {
       $form_options[$value['id']] = $value['title'];
     }
 
@@ -130,37 +115,4 @@ class EmbedFormWidget extends WidgetBase {
     }
     return $massaged;
   }
-
-  /**
-   * Demo data for local development when docker <-> docker curls don't work.
-   *
-   * @return string
-   *   Demo data.
-   */
-  private function demoData() {
-    return '{
-        "data": [
-            {
-                "id": "todistusjaljennospyynto_tilaus",
-                "title": "Todistusjäljennöspyyntö, tilaus",
-                "owner": "Omistajan nimi (TODO)",
-                "sector": "Sektori",
-                "ad_group": "AD-ryhmä",
-                "postal_address": "",
-                "privacy_policy": "",
-                "privacy_policy_sv": "",
-                "privacy_policy_en": "",
-                "privacy_policy_ru": "",
-                "login_type": "2",
-                "sensitive": "1",
-                "form_code": "TODISTUS",
-                "email_notify": "",
-                "status": "public"
-            }
-        ],
-        "method": "GET",
-        "status": 200
-    }';
-  }
-
 }
