@@ -36,11 +36,6 @@ class EmbedFormFormatter extends FormatterBase {
   public function viewElements(FieldItemListInterface $items, $langcode): array {
     $elements = [];
 
-    // Settings from type.
-    $settings = $this->getSettings();
-    // field_settings on concrete field.
-    $field_settings = $this->getFieldSettings();
-
     /** @var \Drupal\helfi_helsinki_profiili\HelsinkiProfiiliUserData $userDataService */
     $userDataService = \Drupal::service('helfi_helsinki_profiili.userdata');
 
@@ -57,19 +52,15 @@ class EmbedFormFormatter extends FormatterBase {
         continue;
       }
 
-      $formToolUrl = getenv('FORM_TOOL_HOST');
+      $formToolUrl = getenv('FORM_TOOL_HOST_EMBED');
       $embedDomainPath = $formToolUrl . '/fi/formtool/';
 
-      $formMetadata = [];
 
       if (empty($item->embed_form_id)) {
         continue;
       }
       if (empty($item->embed_form_data)) {
         continue;
-      }
-      else {
-        $formMetadata = Json::decode($item->embed_form_data);
       }
 
       $itemName = $item->getFieldDefinition()->getName();
